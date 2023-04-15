@@ -37,3 +37,8 @@ def test_classmethod():
     Item.instantiate_from_csv(PATH)
     assert len(Item.all) == 5
 
+
+def test_repr(item1):
+    assert repr(item1) == "Item('Смартфон', 10000, 20)"
+    assert str(item1) == 'Смартфон'
+

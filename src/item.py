@@ -63,3 +63,9 @@ class Item:
         result = float(value)
         result_2 = int(result)
         return result_2
+
+    def __str__(self):
+        return f'{self.name}'
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}('{self.name}', {self.price}, {self.quantity})"
