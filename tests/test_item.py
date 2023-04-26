@@ -39,3 +39,14 @@ def test_classmethod():
 def test_repr(item1):
     assert repr(item1) == "Item('Смартфон', 10000, 20)"
     assert str(item1) == 'Смартфон'
+
+
+def test_get_data_from_csv(item1):
+    """Тест получения данных из csv"""
+    Item.instantiate_from_csv(filename='items.csv')
+
+
+def test_init_instantiate_csv_error(args=None):
+    """Тест ошибки инита"""
+    with pytest.raises(TypeError):
+        args[0] = "Файл item.csv поврежден"

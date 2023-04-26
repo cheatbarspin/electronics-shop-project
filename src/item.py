@@ -4,6 +4,18 @@ import os
 PATH = os.path.dirname(__file__) + '/items.csv'
 
 
+class InstantiateCSVError(Exception):
+    """Класс выявления ошибки в случае, если в файле отсутствуют необходимые поля"""
+
+    def __init__(self, *args):
+        """Конструктор класса InstantiateCSVError"""
+        self.msg = args[0] if args else "Файл item.csv поврежден"
+
+    def __str__(self):
+        """Возврат строкового представления класса InstantiateCSVError"""
+        return self.msg
+
+
 class Item:
     """
     Класс для представления товара в магазине.
@@ -52,10 +64,15 @@ class Item:
 
     @classmethod
     def instantiate_from_csv(cls, filename):
-        with open(filename, encoding='windows-1251') as file:
-            result = csv.DictReader(file)
-            for item in result:
-                cls(item['name'], item['price'], item['quantity'])
+        try:
+            with open(filename, encoding='windows-1251') as file:
+                reader = csv.DictReader(file)
+                for row in reader:
+                    if any(row.get(value) is None for value in ['name', 'price', 'quantity']):
+                        raise InstantiateCSVError("Файл item.csv поврежден")
+                    cls.all.append((row['name'], float(row['price']), int(row['quantity'])))
+        except FileNotFoundError:
+            print("Отсутствует файл item.csv")
 
     @staticmethod
     def string_to_number(value):
